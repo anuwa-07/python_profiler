@@ -9,7 +9,7 @@ if __name__ == "__main__":
         log_record_count=100
     )
 
-    @test_profiler.line_profiler_decorator()
+    @test_profiler.line_profiler_memory()
     def say_myname(name: str) -> None:
         names: list = []
         big_list = []

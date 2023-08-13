@@ -1,9 +1,11 @@
 
 import os
+import io
 import logging
 import subprocess
 import line_profiler
 #
+from memory_profiler import profile as mem_profile
 from typing import Callable
 
 
@@ -15,8 +17,9 @@ class CodeProfiler:
             log_record_count: int = 10
     ) -> None:
         self.__file_path = self.__validate_file_path(file_path)
-        self.__file_path_lprof = f"{self.__file_path}/profile-lprof"
-        self.__file_path_text = f"{self.__file_path}/profile-text"
+        self.__file_path_lprof = f"{self.__file_path}/prof"
+        self.__file_path_time = f"{self.__file_path}/time-based"
+        self.__file_path_mem = f"{self.__file_path}/mem-based"
         self.__log_details = log_details
         self.__log_record_count = log_record_count
 
@@ -37,7 +40,7 @@ class CodeProfiler:
         return f"CodeProfiler(file_path={self.__file_path}, log_details={self.__log_details}, " \
                f"log_record_count={self.__log_record_count}"
 
-    def line_profiler_decorator(self) -> Callable:
+    def line_profiler_time(self) -> Callable:
         """
         This is the decorator function to perform line-by-line profiling of the function.
         This will create the profile file in the given file path and open the browser tab with the profile details.
@@ -58,12 +61,40 @@ class CodeProfiler:
                 profile_file = os.path.abspath(f"{self.__file_path_lprof}/{func.__name__}_line_profiling.lprof")
                 line_profiler_instance.dump_stats(profile_file)
                 #
-                # Print profiling information to the console
-                line_profiler_instance.print_stats()
+                # Log the profile details, if it allowed.
+                if self.__log_details:
+                    print("::::      PROFILE TIME SPEND DETAILS      :::::")
+                    line_profiler_instance.print_stats()
                 #
-                txt_output_filename = f"{self.__file_path_text}/{func.__name__}_line_profiling.txt"
+                txt_output_filename = f"{self.__file_path_time}/{func.__name__}_line_profiling.txt"
                 with open(txt_output_filename, "w") as txt_file:
                     subprocess.run(["python", "-m", "line_profiler", profile_file], stdout=txt_file)
+                #
+                return result
+            return wrapper
+        return decorator
+
+    def line_profiler_memory(self) -> Callable:
+        def decorator(func: Callable) -> Callable:
+            def wrapper(*args, **kwargs):
+                file_name = os.path.abspath(f"{self.__file_path_mem}/{func.__name__}_memory_profile.txt")
+                buffer = io.StringIO()
+
+                # Use the memory profiler @profile decorator to profile memory
+                decorated_func = mem_profile(stream=buffer)(func)
+
+                # Call the decorated function
+                result = decorated_func(*args, **kwargs)
+
+                # Write to File.
+                profile_data = buffer.getvalue()
+                with open(file_name, 'w') as f:
+                    f.write(profile_data)
+                #
+                # Log the profile details, if it allowed.
+                if self.__log_details:
+                    print("::::      PROFILE MEMORY USAGE DETAILS      :::::")
+                    print(profile_data)
                 #
                 return result
             return wrapper
