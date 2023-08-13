@@ -9,5 +9,7 @@ setup(
     license='MIT',
     description='Code Profiler, a python package to profile the code',
     author='Anuruddha Bandara',
+    install_requires=[
+        'line_profiler',  # Add 'line_profiler' to the list of dependencies
+    ]
 )
-
