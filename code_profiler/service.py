@@ -28,13 +28,17 @@ class CodeProfiler:
             logging.error(f":: [ Creating.... ] File path: {self.__file_path} ::")
             os.makedirs(self.__file_path)
         #
-        if not os.path.exists(f"{self.__file_path}/profile-lprof"):
-            logging.error(f":: [ Creating.... ] File path: {self.__file_path}/profile-lprof ::")
-            os.makedirs(f"{self.__file_path}/profile-lprof")
+        if not os.path.exists(f"{self.__file_path}/prof"):
+            logging.error(f":: [ Creating.... ] File path: {self.__file_path}/prof ::")
+            os.makedirs(f"{self.__file_path}/prof")
         #
-        if not os.path.exists(f"{self.__file_path}/profile-text"):
-            logging.error(f":: [ Creating.... ] File path: {self.__file_path}/profile-text ::")
-            os.makedirs(f"{self.__file_path}/profile-text")
+        if not os.path.exists(f"{self.__file_path}/time-based"):
+            logging.error(f":: [ Creating.... ] File path: {self.__file_path}/time-based ::")
+            os.makedirs(f"{self.__file_path}/time-based")
+        #
+        if not os.path.exists(f"{self.__file_path}/mem-based"):
+            logging.error(f":: [ Creating.... ] File path: {self.__file_path}/mem-based ::")
+            os.makedirs(f"{self.__file_path}/mem-based")
 
     def __str__(self) -> str:
         return f"CodeProfiler(file_path={self.__file_path}, log_details={self.__log_details}, " \
