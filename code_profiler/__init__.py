@@ -1,2 +1,2 @@
 
-from service import CodeProfiler
+from .service import CodeProfiler
