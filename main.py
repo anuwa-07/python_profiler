@@ -6,7 +6,8 @@ from memory_profiler import memory_usage
 import matplotlib.pyplot as plt
 
 # Set up the logging
-logging.basicConfig(filename='memory_usage.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+# TODO: add the file, if you need to log memeory usage
+# logging.basicConfig(filename='memory_usage.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
 
 def measure_memory_usage(funck):
