@@ -14,7 +14,7 @@ class CodeProfiler:
             self,
             file_path: str,
             log_details: bool = False,
-            log_record_count: int = 10
+            log_record_count: int = 50
     ) -> None:
         self.__file_path = self.__validate_file_path(file_path)
         self.__file_path_lprof = f"{self.__file_path}/prof"
@@ -46,8 +46,8 @@ class CodeProfiler:
 
     def line_profiler_time(self) -> Callable:
         """
-        This is the decorator function to perform line-by-line profiling of the function.
-        This will create the profile file in the given file path and open the browser tab with the profile details.
+        This decorator will profile the time spend for each line of the function.
+        and write the profiling data to a file and save it in the given file path.
         :return: Callable
         """
         def decorator(func: Callable) -> Callable:
@@ -79,6 +79,11 @@ class CodeProfiler:
         return decorator
 
     def line_profiler_memory(self) -> Callable:
+        """
+        This decorator will profile the memory usage for each line of the function.
+        and write the profiling data to a file and save it in the given file path.
+        :return:
+        """
         def decorator(func: Callable) -> Callable:
             def wrapper(*args, **kwargs):
                 file_name = os.path.abspath(f"{self.__file_path_mem}/{func.__name__}_memory_profile.txt")

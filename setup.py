@@ -10,7 +10,7 @@ setup(
     description='Code Profiler, a python package to profile the code',
     author='Anuruddha Bandara',
     install_requires=[
-        'line_profiler',  # Add 'line_profiler' to the list of dependencies
-        'memory-profiler'  # Add 'memory-profiler' to the list of dependencies
+        'line_profiler',
+        'memory-profiler'
     ]
 )
